@@ -1,18 +1,43 @@
 import os
 import telebot
 
-# ከ BotFather የተቀበልከው ቶከን
-TOKEN = "9103081215:AAE4esCdRCvCmajM0pjtE1n3TGohtHEAjNA"
+TOKEN = os.getenv("BOT_TOKEN")
+
+if not TOKEN:
+    raise ValueError("BOT_TOKEN is missing")
+
 bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])
-def send_welcome(message):
-    bot.reply_to(message, "ሰላም! እንኳን ወደ ሊቃውንት የኦርቶዶክስ AI ረዳት በደህና መጡ። ማንኛውንም ሃይማኖታዊ ጥያቄ መጠየቅ ይችላሉ።")
+def start(message):
+    bot.reply_to(
+        message,
+        "✝️ እንኳን ወደ Likawent AI Bot በደህና መጡ!\n\n"
+        "ይህ ቦት ስለ ኢትዮጵያ "
+        "ኦርቶዶክስ ተዋሕዶ ትምህርት "
+        "እና ቅዱሳን መረጃ ይሰጣል።\n\n"
+        "ጥያቄዎን ይጻፉ።"
+    )
+
+@bot.message_handler(commands=['help'])
+def help_command(message):
+    bot.reply_to(
+        message,
+        "📚 Likawent AI Bot\n\n"
+        "ስለሚከተሉት መጠየቅ ይችላሉ፦\n"
+        "1. ቅዱሳን\n"
+        "2. የቤተክርስቲያን በዓላት\n"
+        "3. መጽሐፍ ቅዱስ\n"
+        "4. የኦርቶዶክስ ትምህርቶች"
+    )
 
 @bot.message_handler(func=lambda message: True)
-def handle_message(message):
-    user_text = message.text
-    bot.reply_to(message, f"ጥያቄዎ ደርሶኛል፡ '{user_text}'\n\nበቅርቡ ሙሉ የ AI እውቀት ተገጥሞለት ዝርዝር መልስ ይሰጥዎታል!")
+def reply(message):
+    bot.reply_to(
+        message,
+        "📖 ጥያቄዎን ተቀብያለሁ። "
+        "የAI መልስ አገልግሎት በሚቀጥለው "
+        "የግንባታ ደረጃ ይጨመራል።"
+    )
 
-print("ቦቱ ስራ ጀምሯል...")
 bot.infinity_polling()
